@@ -12,5 +12,5 @@ public class DetallePedido
     public int PedidoSimpleId { get; set; }
     public PedidoSimple? PedidoSimple { get; set; }
 
-    public decimal Subtotal() => Cantidad * PrecioUnitarioHistorico;
+    public decimal Subtotal() => Cantidad* PrecioUnitarioHistorico; 
 }

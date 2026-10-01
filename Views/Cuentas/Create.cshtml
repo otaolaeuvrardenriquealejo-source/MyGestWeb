@@ -1,0 +1,51 @@
+@model MyGestWeb.Models.Cuenta
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Cuenta</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="SaldoDisponible" class="control-label"></label>
+                <input asp-for="SaldoDisponible" class="form-control" />
+                <span asp-validation-for="SaldoDisponible" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TratamientoEspecifico" class="control-label"></label>
+                <input asp-for="TratamientoEspecifico" class="form-control" />
+                <span asp-validation-for="TratamientoEspecifico" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ClienteId" class="form-label">Cliente (buscar por ID o nombre)</label>
+                <input asp-for="ClienteId" list="clientesOpciones" class="form-control" placeholder="Escribí para buscar o ingresá el ID..." autocomplete="off" />
+                <datalist id="clientesOpciones">
+                    @if (ViewBag.ListaClientes != null)
+                    {
+                        foreach (var cliente in (List<MyGestWeb.Models.Cliente>)ViewBag.ListaClientes)
+                        {
+                            <option value="@cliente.Id">@cliente.Nombre</option>
+                        }
+                    }
+                </datalist>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

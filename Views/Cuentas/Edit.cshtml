@@ -1,44 +1,48 @@
 @model MyGestWeb.Models.Cuenta
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Cuenta";
 }
 
-<h1>Edit</h1>
-
-<h4>Cuenta</h4>
+<h1>Editar Cuenta</h1>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Campo oculto obligatorio para mantener el ID de la cuenta -->
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="SaldoDisponible" class="control-label"></label>
+
+            <div class="mb-3">
+                <label asp-for="ClienteId" class="form-label">Cliente</label>
+                <select asp-for="ClienteId" class="form-select" asp-items="ViewBag.ClienteId"></select>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SaldoDisponible" class="form-label"></label>
                 <input asp-for="SaldoDisponible" class="form-control" />
                 <span asp-validation-for="SaldoDisponible" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TratamientoEspecifico" class="control-label"></label>
+
+            <div class="mb-3">
+                <label asp-for="TratamientoEspecifico" class="form-label"></label>
                 <input asp-for="TratamientoEspecifico" class="form-control" />
                 <span asp-validation-for="TratamientoEspecifico" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ClienteId" class="control-label"></label>
-                <input asp-for="ClienteId" class="form-control" />
-                <span asp-validation-for="ClienteId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="mt-4">
+                <input type="submit" value="Guardar Cambios" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Volver al listado</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

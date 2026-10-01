@@ -13,12 +13,15 @@ public class ClientesController : Controller
         _context = context;
     }
 
-    // GET: CLIENTES
-    public async Task<IActionResult> Index()    
+    // GET: Clientes
+    public async Task<IActionResult> Index()
     {
-        return View(await _context.Clientes.ToListAsync());
-    }
+        var clientes = await _context.Clientes
+            .Include(c => c.Cuentas)
+            .ToListAsync();
 
+        return View(clientes);
+    }
     // GET: CLIENTES/Details/5
     public async Task<IActionResult> Details(int? id)
     {

@@ -1,25 +1,66 @@
 ﻿@model IEnumerable<MyGestWeb.Models.PedidoSimple>
 
-<h2>Listado de Pedidos</h2>
-<a asp-action="Create" class="btn btn-success mb-3">Nuevo Pedido</a>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID Pedido</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>Cliente (Cuenta)</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-            <td>@item.Estado</td>
-            <td>@item.CuentaPago?.Cliente?.Nombre (Cuenta #@item.CuentaId)</td>
-        </tr>
+@{
+    ViewData["Title"] = "Listado de Pedidos";
 }
-    </tbody>
-</table>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Listado de Pedidos (Cabeceras)</h2>
+        <a asp-action="Create" class="btn btn-success">
+            + Nuevo Pedido
+        </a>
+    </div>
+    <hr />
+
+    <table class="table table-striped table-hover border">
+        <thead class="table-dark">
+            <tr>
+                <th>Nº Pedido</th>
+                <th>Fecha y Hora</th>
+                <th>Estado</th>
+                <th>Cliente (Nº Cuenta)</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">#@item.Id</td>
+                        <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <span class="badge bg-secondary">@item.Estado</span>
+                        </td>
+                        <td>
+                            @if (item.CuentaPago != null && item.CuentaPago.Cliente != null)
+                            {
+                                @item.CuentaPago.Cliente.Nombre
+                                <span class="text-muted">(Cuenta #@item.CuentaId)</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">Datos no encontrados</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">
+                                Ver Detalles / Carrito
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <em>Todavía no hay ningún pedido registrado en el sistema. ¡Crea el primero!</em>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,63 @@
+@model IEnumerable<MyGestWeb.Models.Cuenta>
+
+@{
+    ViewData["Title"] = "Cuentas";
+}
+
+<h1>Listado de Cuentas</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Agregar Cuenta</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                N° Cuenta
+            </th>
+            <th>
+                Cliente
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaldoDisponible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TratamientoEspecifico)
+            </th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @if (item.Cliente != null)
+                    {
+                        <span>[@item.Cliente.Id] @item.Cliente.Nombre</span>
+                    }
+                    else
+                    {
+                        <span>ID: @item.ClienteId</span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SaldoDisponible)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TratamientoEspecifico)
+                </td>
+                <td>
+                    <a asp-action="AumentarSaldo" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success">Aumentar Saldo</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

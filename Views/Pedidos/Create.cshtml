@@ -8,26 +8,81 @@
     <h2>Iniciar Nuevo Pedido</h2>
     <p class="text-muted">Paso 1: Cabecera del pedido</p>
     <hr />
-    
+
     <div class="row">
         <div class="col-md-6">
             <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- MENÚ 1: CLIENTES -->
                 <div class="form-group mb-3">
-                    <label class="control-label fw-bold mb-2">Seleccione el Cliente y la Cuenta con la que pagará</label>
-                    
-                    <!-- Este es el menú desplegable que usa los datos del Controlador -->
-                    <select asp-for="CuentaId" class="form-select" asp-items="ViewBag.CuentasDisponibles" required>
-                        <option value="">-- Elija una cuenta --</option>
+                    <label class="control-label fw-bold mb-2">1. Seleccione el Cliente</label>
+                    <select id="ClienteId" class="form-select" asp-items="ViewBag.Clientes">
+                        <option value="">-- Elija un cliente --</option>
                     </select>
                 </div>
-                
+
+                <!-- MENÚ 2: CUENTAS -->
+                <div class="form-group mb-4">
+                    <label class="control-label fw-bold mb-2">2. Seleccione la Cuenta a debitar</label>
+                    <select asp-for="CuentaId" id="CuentaId" class="form-select" disabled required>
+                        <option value="">-- Primero elija un cliente --</option>
+                    </select>
+                    <span asp-validation-for="CuentaId" class="text-danger"></span>
+                </div>
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">
                         Crear Pedido y Continuar <i class="bi bi-arrow-right"></i>
                     </button>
-                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary ms-2">Cancelar</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.getElementById('ClienteId').addEventListener('change', function() {
+            var clienteId = this.value;
+            var ddlCuentas = document.getElementById('CuentaId');
+
+            if (!clienteId) {
+                ddlCuentas.innerHTML = '<option value="">-- Primero elija un cliente --</option>';
+                ddlCuentas.disabled = true;
+                return;
+            }
+
+            // Petición silenciosa al servidor (AJAX)
+            fetch(`/Pedidos/ObtenerCuentas?clienteId=${clienteId}`)
+                .then(response => response.json())
+                .then(data => {
+                    ddlCuentas.innerHTML = '<option value="">-- Elija una cuenta --</option>';
+
+                    if (data.length === 0) {
+                        ddlCuentas.innerHTML = '<option value="">-- Este cliente no tiene cuentas --</option>';
+                        ddlCuentas.disabled = true;
+                        return;
+                    }
+
+                    data.forEach(cuenta => {
+                        var option = document.createElement('option');
+                        option.value = cuenta.value;
+                        option.text = cuenta.text;
+                        ddlCuentas.appendChild(option);
+                    });
+
+                    ddlCuentas.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al conectar con la base de datos.');
+                });
+        });
+    </script>
+}

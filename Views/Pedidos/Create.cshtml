@@ -1,0 +1,33 @@
+﻿@model MyGestWeb.Models.PedidoSimple
+
+@{
+    ViewData["Title"] = "Nuevo Pedido";
+}
+
+<div class="container mt-4">
+    <h2>Iniciar Nuevo Pedido</h2>
+    <p class="text-muted">Paso 1: Cabecera del pedido</p>
+    <hr />
+    
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create" method="post">
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold mb-2">Seleccione el Cliente y la Cuenta con la que pagará</label>
+                    
+                    <!-- Este es el menú desplegable que usa los datos del Controlador -->
+                    <select asp-for="CuentaId" class="form-select" asp-items="ViewBag.CuentasDisponibles" required>
+                        <option value="">-- Elija una cuenta --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                        Crear Pedido y Continuar <i class="bi bi-arrow-right"></i>
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

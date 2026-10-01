@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MyGestWeb.Models.PedidoSimple>
+
+<h2>Listado de Pedidos</h2>
+<a asp-action="Create" class="btn btn-success mb-3">Nuevo Pedido</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID Pedido</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Cliente (Cuenta)</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>@item.Estado</td>
+            <td>@item.CuentaPago?.Cliente?.Nombre (Cuenta #@item.CuentaId)</td>
+        </tr>
+}
+    </tbody>
+</table>

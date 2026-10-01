@@ -1,47 +1,62 @@
 @model IEnumerable<MyGestWeb.Models.Cliente>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Clientes";
 }
 
-<h1>Index</h1>
+<h1>Listado de Clientes</h1>
 
 <p>
-    <a asp-action="Create">Agregar Cliente</a>
+    <a asp-action="Create" class="btn btn-primary">Agregar Cliente</a>
 </p>
-<table class="table">
+
+<table class="table align-middle">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Direccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cuentas)
-            </th>
-            <th></th>
+            <th>N° Cliente</th>
+            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+            <th>@Html.DisplayNameFor(model => model.Direccion)</th>
+            <th>Cuentas Asociadas</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Cuentas)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Direccion)
+                </td>
+                <td>
+                    @if (item.Cuentas != null && item.Cuentas.Any())
+                    {
+                        <ul class="list-unstyled mb-0">
+                            @foreach (var cuenta in item.Cuentas)
+                            {
+                                <li class="mb-1">
+                                    <span class="badge bg-secondary">ID: @cuenta.Id</span>
+                                    <strong>$@cuenta.SaldoDisponible</strong>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-muted fst-italic">Sin cuentas</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
